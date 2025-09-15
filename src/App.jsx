@@ -1,8 +1,13 @@
-// App.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination as SwiperPagination } from 'swiper/modules';
+import Navbar from './components/Navbar';
 import Productcard from './components/ProdcutCard';
 import Pagination from './components/Pagination';
 import products from './components/Products';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const PRODUCTS_PER_PAGE = 6;
 
@@ -17,23 +22,70 @@ function App() {
   const handlePageChange = (page) => page >= 1 && page <= totalPages && setCurrentPage(page);
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Product Gallery</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {currentProducts.map(product => (
-          <Productcard key={product.id} product={product} />
-        ))}
+    <div className="min-h-screen bg-gray-100">
+      <Navbar />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center md:text-left">
+          Product Gallery
+        </h1>
+        <Swiper
+          modules={[Navigation, SwiperPagination]}
+          spaceBetween={24}
+          slidesPerView={3}
+          navigation
+          pagination={{ clickable: true }}
+          breakpoints={{
+            0: {
+              slidesPerView: 1,
+              spaceBetween: 10,
+            },
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 16,
+            },
+            768: {
+              slidesPerView: 3,
+              spaceBetween: 24,
+            },
+          }}
+          className="mySwiper"
+        >
+          {currentProducts.map(product => (
+            <SwiperSlide key={product.id} className="flex justify-center">
+              <Productcard product={product} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+        <div className="mt-8 flex justify-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
       </div>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
     </div>
   );
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
